@@ -20,6 +20,7 @@ namespace CowTracker
             
             public int Pen { get; set; }
             //add buy date later
+            // maybe Nickname
             public DateTime ImplantDate { get; set; }
             public DateTime NextImplantDate { get; set;}
             public int Implant_length { get; set; }

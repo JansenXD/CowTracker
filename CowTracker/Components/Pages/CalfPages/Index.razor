@@ -2,29 +2,42 @@
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject CowTracker.Data.CowTrackerContext DB
 @using CowTracker
+@rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
 
-<h1>Index</h1>
+<h1>Calves</h1>
 
 <p>
     <a href="calves/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="DB.Calf">
-    <PropertyColumn Property="calf => calf.TagNum" />
-    <PropertyColumn Property="calf => calf.TagColor" />
-    <PropertyColumn Property="calf => calf.Breed" />
-    <PropertyColumn Property="calf => calf.Gender" />
-    <PropertyColumn Property="calf => calf.Cost" />
-    <PropertyColumn Property="calf => calf.Pen" />
-    <PropertyColumn Property="calf => calf.ImplantDate" />
-    <PropertyColumn Property="calf => calf.NextImplantDate" />
-    <PropertyColumn Property="calf => calf.Implant_length" />
 
-    <TemplateColumn Context="calf">
-        <a href="@($"calves/edit?id={calf.Id}")">Edit</a> |
-        <a href="@($"calves/details?id={calf.Id}")">Details</a> |
-        <a href="@($"calves/delete?id={calf.Id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+    <QuickGrid Class="table" Items="DB.Calf">
+        <PropertyColumn Property="calf => calf.TagNum" />
+        <PropertyColumn Property="calf => calf.TagColor" />
+        <PropertyColumn Property="calf => calf.Breed" Sortable="true" />
+        <PropertyColumn Property="calf => calf.Gender" />
+        <PropertyColumn Property="calf => calf.Cost" Sortable="true" />
+        <PropertyColumn Property="calf => calf.Pen" Sortable="true" />
+        <PropertyColumn Property="calf => calf.ImplantDate" />
+        <PropertyColumn Property="calf => calf.NextImplantDate" Sortable="true"/>
+        <PropertyColumn Property="calf => calf.Implant_length" />
+
+        <TemplateColumn Context="calf">
+            <a href="@($"calves/edit?id={calf.Id}")">Edit</a> 
+            <a href="@($"calves/details?id={calf.Id}")">Details</a> 
+            <a href="@($"calves/delete?id={calf.Id}")">Delete</a>
+        </TemplateColumn>
+    </QuickGrid>
+
+
+
+
+<Paginator State="paginationState" />
+
+@code 
+{
+   
+       PaginationState paginationState = new() { ItemsPerPage = 50 };
+}
