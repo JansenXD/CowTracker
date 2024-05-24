@@ -1,0 +1,85 @@
+﻿@page "/calves/delete"
+@inject CowTracker.Data.CowTrackerContext DB
+@using CowTracker
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Calf</h4>
+    <hr />
+    @if (calf is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">TagNum</dt>
+            <dd class="col-sm-10">@calf.TagNum</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">TagColor</dt>
+            <dd class="col-sm-10">@calf.TagColor</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Breed</dt>
+            <dd class="col-sm-10">@calf.Breed</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Gender</dt>
+            <dd class="col-sm-10">@calf.Gender</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Cost</dt>
+            <dd class="col-sm-10">@calf.Cost</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Pen</dt>
+            <dd class="col-sm-10">@calf.Pen</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ImplantDate</dt>
+            <dd class="col-sm-10">@calf.ImplantDate</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">NextImplantDate</dt>
+            <dd class="col-sm-10">@calf.NextImplantDate</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Implant_length</dt>
+            <dd class="col-sm-10">@calf.Implant_length</dd>
+        </dl>
+        <EditForm method="post" Model="calf" OnValidSubmit="DeleteCalf" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(calf is null)">Delete</button> |
+            <a href="/calves">Back to List</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    Calf? calf;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        calf = await DB.Calf.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (calf is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    public async Task DeleteCalf()
+    {
+        DB.Calf.Remove(calf!);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/calves");
+    }
+}

@@ -1,0 +1,86 @@
+﻿@page "/PenDBs/edit"
+@inject CowTracker.Data.CowTrackerContext DB
+@using CowTracker
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h4>PenDB</h4>
+<hr />
+@if (PenDB is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="PenDB" OnValidSubmit="UpdatePenDB" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="PenDB.ID" value="@PenDB.ID" />
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <InputText id="name" @bind-Value="PenDB.Name" class="form-control" />
+                    <ValidationMessage For="() => PenDB.Name" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/pendbs">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int ID { get; set; }
+
+    [SupplyParameterFromForm]
+    public PenDB? PenDB { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        PenDB ??= await DB.PenDB.FirstOrDefaultAsync(m => m.ID == ID);
+
+        if (PenDB is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see https://aka.ms/RazorPagesCRUD.
+    public async Task UpdatePenDB()
+    {
+        DB.Attach(PenDB!).State = EntityState.Modified;
+
+        try
+        {
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!PenDBExists(PenDB!.ID))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/pendbs");
+    }
+
+    bool PenDBExists(int id)
+    {
+        return DB.PenDB.Any(e => e.ID == id);
+    }
+}

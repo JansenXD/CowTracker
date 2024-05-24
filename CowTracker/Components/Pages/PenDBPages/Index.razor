@@ -1,0 +1,23 @@
+﻿@page "/pendbs"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject CowTracker.Data.CowTrackerContext DB
+@using CowTracker
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="pendbs/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.PenDB">
+    <PropertyColumn Property="pendb => pendb.Name" />
+    <PropertyColumn Property="pendb => pendb.ID" />
+
+    <TemplateColumn Context="pendb">
+        <a href="@($"pendbs/edit?id={pendb.ID}")">Edit</a> |
+        <a href="@($"pendbs/details?id={pendb.ID}")">Details</a> |
+        <a href="@($"pendbs/delete?id={pendb.ID}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>

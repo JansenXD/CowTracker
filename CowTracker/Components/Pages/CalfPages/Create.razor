@@ -1,0 +1,83 @@
+﻿@page "/calves/create"
+@inject CowTracker.Data.CowTrackerContext DB
+@using CowTracker
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>Calf</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Calf" OnValidSubmit="AddCalf" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="tagnum" class="form-label">TagNum:</label> 
+                <InputNumber id="tagnum" @bind-Value="Calf.TagNum" class="form-control" /> 
+                <ValidationMessage For="() => Calf.TagNum" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="tagcolor" class="form-label">TagColor:</label> 
+                <InputText id="tagcolor" @bind-Value="Calf.TagColor" class="form-control" /> 
+                <ValidationMessage For="() => Calf.TagColor" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="breed" class="form-label">Breed:</label> 
+                <InputText id="breed" @bind-Value="Calf.Breed" class="form-control" /> 
+                <ValidationMessage For="() => Calf.Breed" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender:</label> 
+                <InputText id="gender" @bind-Value="Calf.Gender" class="form-control" /> 
+                <ValidationMessage For="() => Calf.Gender" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="cost" class="form-label">Cost:</label> 
+                <InputNumber id="cost" @bind-Value="Calf.Cost" class="form-control" /> 
+                <ValidationMessage For="() => Calf.Cost" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="pen" class="form-label">Pen:</label> 
+                <InputNumber id="pen" @bind-Value="Calf.Pen" class="form-control" /> 
+                <ValidationMessage For="() => Calf.Pen" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="implantdate" class="form-label">ImplantDate:</label> 
+                <InputDate id="implantdate" @bind-Value="Calf.ImplantDate" class="form-control" /> 
+                <ValidationMessage For="() => Calf.ImplantDate" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="nextimplantdate" class="form-label">NextImplantDate:</label> 
+                <InputDate id="nextimplantdate" @bind-Value="Calf.NextImplantDate" class="form-control" /> 
+                <ValidationMessage For="() => Calf.NextImplantDate" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="implant_length" class="form-label">Implant_length:</label> 
+                <InputNumber id="implant_length" @bind-Value="Calf.Implant_length" class="form-control" /> 
+                <ValidationMessage For="() => Calf.Implant_length" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/calves">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public Calf Calf { get; set; } = new();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddCalf()
+    {
+        DB.Calf.Add(Calf);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/calves");
+    }
+}

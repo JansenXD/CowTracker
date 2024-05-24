@@ -1,0 +1,43 @@
+﻿@page "/pendbs/create"
+@inject CowTracker.Data.CowTrackerContext DB
+@using CowTracker
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>PenDB</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="PenDB" OnValidSubmit="AddPenDB" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label> 
+                <InputText id="name" @bind-Value="PenDB.Name" class="form-control" /> 
+                <ValidationMessage For="() => PenDB.Name" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/pendbs">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public PenDB PenDB { get; set; } = new();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddPenDB()
+    {
+        DB.PenDB.Add(PenDB);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/pendbs");
+    }
+}
